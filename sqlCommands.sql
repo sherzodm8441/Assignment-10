@@ -16,7 +16,7 @@ alter table employees add primary key(employee_id);
 
 
 create table car_dealership(
-    dealership_name varchar(50),
+    dealership_name varchar(30),
     dealership_id int not null, 
     city varchar(30),
     brand_id int,
@@ -24,10 +24,10 @@ create table car_dealership(
     foreign key(brand_id) references car_brands(brand_id)
 );
 
-alter table employees add foreign key(manager_id) references employees(employee_id);
+alter table employees add foreign key(dealership_id) references car_dealership(dealership_id);
 
 create table car_models(
-    model_name varchar(30),
+    model_name varchar(20),
     model_id int not null,
     model_year int,
     brand_id int,
@@ -35,3 +35,27 @@ create table car_models(
     foreign key(brand_id) references car_brands(brand_id)
 );
 
+insert into car_brands values
+('Toyota', 100, 'Japan'),
+('BMW', 101, 'Germany'),
+('Renault', 102, 'France'),
+('Tesla', 103, 'USA');
+
+insert into car_dealership values
+('Toyota Dealership', 200, 'Brooklyn', 100),
+('BMW Dealership', 201, 'Manhattan', 101),
+('Renault Dealership', 202, 'Paris', 102),
+('Tesla Dealership', 203, 'Los Angeles', 100);
+
+insert into car_models values
+('Rav4', 300, 2022, 100),
+('X1', 301, 2021, 101),
+('Arkana', 302, 2022, 102),
+('Model3', 303, 2020, 103);
+
+
+insert into employees values
+('Bailey Adams', 400, 'm', 100),
+('Nadia Nixon', 401, 'f', 101),
+('Stewart Quimby', 402, 'm', 102),
+('Violet Mason', 403, 'f', 103);
