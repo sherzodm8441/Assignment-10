@@ -1,5 +1,4 @@
 
-        ^
 postgres=# create database car_dealerships;
 CREATE DATABASE
 postgres=# \c car_dealerships
