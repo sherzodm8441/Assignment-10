@@ -1,4 +1,4 @@
-CREATE DATABASE us_car_dealerships;
+CREATE DATABASE car_dealerships;
 
 create table car_brands(
     brand_name varchar(30),
@@ -57,21 +57,21 @@ insert into car_models values
 
 
 insert into employees values
-('Bailey Adams', 400, 'm', 100),
-('Nadia Nixon', 401, 'f', 101),
-('Stewart Quimby', 402, 'm', 102),
-('Violet Mason', 403, 'f', 103);
+('Bailey Adams', 400, 'm', 200),
+('Nadia Nixon', 401, 'f', 201),
+('Stewart Quimby', 402, 'm', 202),
+('Violet Mason', 403, 'f', 203);
 
 
 select * from car_models
 inner join car_brands
-on car_models.brand_id = car_brands.id
+on car_models.brand_id = car_brands.brand_id;
 
 select * from car_models
 inner join car_brands on car_models.brand_id = car_brands.brand_id
-inner join car_dealership on car_brands.id = car_dealership.dealership_id
+inner join car_dealership on car_brands.brand_id = car_dealership.brand_id;
 
 select * from car_models
 inner join car_brands on car_models.brand_id = car_brands.brand_id
-inner join car_dealership on car_brands.id = car_dealership.dealership_id
-inner join employees on car_dealership.dealership_id = employees.employee_id
+inner join car_dealership on car_brands.brand_id = car_dealership.brand_id
+inner join employees on car_dealership.dealership_id = employees.dealership_id;
