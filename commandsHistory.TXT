@@ -1,49 +1,4 @@
-Server [localhost]:
-Database [postgres]:
-Port [5432]:
-Username [postgres]:
-Password for user postgres:
-psql (14.1)
-WARNING: Console code page (437) differs from Windows code page (1252)
-         8-bit characters might not work correctly. See psql reference
-         page "Notes for Windows users" for details.
-Type "help" for help.
 
-postgres=# select version();
-                          version
-------------------------------------------------------------
- PostgreSQL 14.1, compiled by Visual C++ build 1914, 64-bit
-(1 row)
-
-
-postgres=# \l
-                                                 List of databases
-   Name    |  Owner   | Encoding |          Collate           |           Ctype            |   Access privileges
------------+----------+----------+----------------------------+----------------------------+-----------------------
- postgres  | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
- template0 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
-           |          |          |                            |                            | postgres=CTc/postgres
- template1 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
-           |          |          |                            |                            | postgres=CTc/postgres
-(3 rows)
-
-
-postgres=# create database car_dealerships
-postgres-# \l
-                                                 List of databases
-   Name    |  Owner   | Encoding |          Collate           |           Ctype            |   Access privileges
------------+----------+----------+----------------------------+----------------------------+-----------------------
- postgres  | postgres | UTF8     | English_United States.1252 | English_United States.1252 |
- template0 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
-           |          |          |                            |                            | postgres=CTc/postgres
- template1 | postgres | UTF8     | English_United States.1252 | English_United States.1252 | =c/postgres          +
-           |          |          |                            |                            | postgres=CTc/postgres
-(3 rows)
-
-
-postgres-# create database car_dealerships;
-ERROR:  syntax error at or near "create"
-LINE 2: create database car_dealerships;
         ^
 postgres=# create database car_dealerships;
 CREATE DATABASE
@@ -104,13 +59,6 @@ car_dealerships-# ('Arkana', 302, 2022, 102),
 car_dealerships-# ('Model3', 303, 2020, 103);
 INSERT 0 4
 car_dealerships=# insert into employees values
-car_dealerships-# ('Bailey Adams', 400, 'm', 100),
-car_dealerships-# ('Nadia Nixon', 401, 'f', 101),
-car_dealerships-# ('Stewart Quimby', 402, 'm', 102),
-car_dealerships-# ('Violet Mason', 403, 'f', 103);
-ERROR:  insert or update on table "employees" violates foreign key constraint "employees_dealership_id_fkey"
-DETAIL:  Key (dealership_id)=(100) is not present in table "car_dealership".
-car_dealerships=# insert into employees values
 car_dealerships-# ('Bailey Adams', 400, 'm', 200),
 car_dealerships-# ('Nadia Nixon', 401, 'f', 201),
 car_dealerships-# ('Stewart Quimby', 402, 'm', 202),
@@ -122,9 +70,35 @@ car_dealerships-# on car_models.brand_id = car_brands.id
 car_dealerships-# select * from car_models
 car_dealerships-# inner join car_brands
 car_dealerships-# on car_models.brand_id = car_brands.id;
-ERROR:  syntax error at or near "select"
-LINE 4: select * from car_models
-        ^
+
+
+        
+car_dealerships=# select * from car_dealership;
+  dealership_name   | dealership_id |    city     | brand_id
+--------------------+---------------+-------------+----------
+ Toyota Dealership  |           200 | Brooklyn    |      100
+ BMW Dealership     |           201 | Manhattan   |      101
+ Renault Dealership |           202 | Paris       |      102
+ Tesla Dealership   |           203 | Los Angeles |      100
+(4 rows)
+
+
+
+
+car_dealerships=# update car_dealership
+car_dealerships-# set brand_id = 103
+car_dealerships-# where dealership_id = 203;
+UPDATE 1
+car_dealerships=# select * from car_dealership;
+  dealership_name   | dealership_id |    city     | brand_id
+--------------------+---------------+-------------+----------
+ Toyota Dealership  |           200 | Brooklyn    |      100
+ BMW Dealership     |           201 | Manhattan   |      101
+ Renault Dealership |           202 | Paris       |      102
+ Tesla Dealership   |           203 | Los Angeles |      103
+(4 rows)
+
+
 car_dealerships=# select * from car_models
 car_dealerships-# inner join car_brands
 car_dealerships-# on car_models.brand_id = car_brands.brand_id;
@@ -142,10 +116,10 @@ car_dealerships-# inner join car_brands on car_models.brand_id = car_brands.bran
 car_dealerships-# inner join car_dealership on car_brands.brand_id = car_dealership.brand_id;
  model_name | model_id | model_year | brand_id | brand_name | brand_id | country |  dealership_name   | dealership_id |    city     | brand_id
 ------------+----------+------------+----------+------------+----------+---------+--------------------+---------------+-------------+----------
- Rav4       |      300 |       2022 |      100 | Toyota     |      100 | Japan   | Tesla Dealership   |           203 | Los Angeles |      100
  Rav4       |      300 |       2022 |      100 | Toyota     |      100 | Japan   | Toyota Dealership  |           200 | Brooklyn    |      100
  X1         |      301 |       2021 |      101 | BMW        |      101 | Germany | BMW Dealership     |           201 | Manhattan   |      101
  Arkana     |      302 |       2022 |      102 | Renault    |      102 | France  | Renault Dealership |           202 | Paris       |      102
+ Model3     |      303 |       2020 |      103 | Tesla      |      103 | USA     | Tesla Dealership   |           203 | Los Angeles |      103
 (4 rows)
 
 
@@ -155,10 +129,11 @@ car_dealerships-# inner join car_dealership on car_brands.brand_id = car_dealers
 car_dealerships-# inner join employees on car_dealership.dealership_id = employees.dealership_id;
  model_name | model_id | model_year | brand_id | brand_name | brand_id | country |  dealership_name   | dealership_id |    city     | brand_id | employee_name  | employee_id | gender | dealership_id
 ------------+----------+------------+----------+------------+----------+---------+--------------------+---------------+-------------+----------+----------------+-------------+--------+---------------
- Rav4       |      300 |       2022 |      100 | Toyota     |      100 | Japan   | Tesla Dealership   |           203 | Los Angeles |      100 | Violet Mason   |         403 | f      |           203
  Rav4       |      300 |       2022 |      100 | Toyota     |      100 | Japan   | Toyota Dealership  |           200 | Brooklyn    |      100 | Bailey Adams   |         400 | m      |           200
  X1         |      301 |       2021 |      101 | BMW        |      101 | Germany | BMW Dealership     |           201 | Manhattan   |      101 | Nadia Nixon    |         401 | f      |           201
  Arkana     |      302 |       2022 |      102 | Renault    |      102 | France  | Renault Dealership |           202 | Paris       |      102 | Stewart Quimby |         402 | m      |           202
+ Model3     |      303 |       2020 |      103 | Tesla      |      103 | USA     | Tesla Dealership   |           203 | Los Angeles |      103 | Violet Mason   |         403 | f      |           203
 (4 rows)
 
 
+car_dealerships=#
